@@ -1,0 +1,33 @@
+﻿@using BigData.DAL.Entities
+
+@{
+    Layout = null;
+}
+
+
+
+<h1>Car List</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Plate</th>
+            <th>Brand</th>
+            <th>Model</th>
+           
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var car in Model)
+        {
+            <tr>
+                <td>@car.ID</td>
+                <td>@car.PLATE</td>
+                <td>@car.BRAND</td>
+                <td>@car.MODEL</td>
+               
+            </tr>
+        }
+    </tbody>
+</table>
