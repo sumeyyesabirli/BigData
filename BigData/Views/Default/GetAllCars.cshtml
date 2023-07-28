@@ -1,10 +1,6 @@
 ﻿@using BigData.DAL.Entities
 
-@{
-    Layout = null;
-}
-
-
+@model IEnumerable<Plates>
 
 <h1>Car List</h1>
 
@@ -31,3 +27,35 @@
         }
     </tbody>
 </table>
+
+@if (ViewBag.TotalCount > ViewBag.PageSize)
+{
+    <div>
+        <a asp-action="GetAllCars" asp-route-pageNumber="1" asp-route-pageSize="@ViewBag.PageSize">First</a>
+        @if (ViewBag.PageNumber > 1)
+        {
+            <a asp-action="GetAllCars" asp-route-pageNumber="@ViewBag.PageNumber - 1" asp-route-pageSize="@ViewBag.PageSize">Previous</a>
+        }
+
+        @for (int i = ViewBag.PageNumber - 2; i <= ViewBag.PageNumber + 2; i++)
+        {
+            if (i >= 1 && i <= Math.Ceiling((double)ViewBag.TotalCount / ViewBag.PageSize))
+            {
+                if (i == ViewBag.PageNumber)
+                {
+                    <span>@i</span>
+                }
+                else
+                {
+                    <a asp-action="GetAllCars" asp-route-pageNumber="@i" asp-route-pageSize="@ViewBag.PageSize">@i</a>
+                }
+            }
+        }
+
+        @if (ViewBag.PageNumber < Math.Ceiling((double)ViewBag.TotalCount / ViewBag.PageSize))
+        {
+            <a asp-action="GetAllCars" asp-route-pageNumber="@ViewBag.PageNumber + 1" asp-route-pageSize="@ViewBag.PageSize">Next</a>
+        }
+        <a asp-action="GetAllCars" asp-route-pageNumber="@Math.Ceiling((double)ViewBag.TotalCount / ViewBag.PageSize)" asp-route-pageSize="@ViewBag.PageSize">Last</a>
+    </div>
+}
