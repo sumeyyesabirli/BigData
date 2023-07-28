@@ -27,7 +27,7 @@ namespace BigData.Controllers
 
                 ViewBag.PageNumber = pageNumber;
                 ViewBag.PageSize = pageSize;
-                ViewBag.TotalCount = GetTotalCarCount(connection); // Toplam veri sayısını alır.
+                ViewBag.TotalCount = GetTotalCarCount(connection);
 
                 return View(cars);
             }

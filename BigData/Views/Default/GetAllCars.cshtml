@@ -1,61 +1,109 @@
 ﻿@using BigData.DAL.Entities
 
 @model IEnumerable<Plates>
+<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-<h1>Car List</h1>
-
-<table>
-    <thead>
+<div class="container">
+    <br /><br />
+    <table class="table table-bordered">
         <tr>
+            <th>#</th>
             <th>ID</th>
+            <th>Car ID</th>
             <th>Plate</th>
+            <th>Licence Date</th>
+            <th>City Number</th>
+            <th>Title</th>
             <th>Brand</th>
             <th>Model</th>
-           
+            <th>Year</th>
+            <th>Fuel</th>
+            <th>Shift Type</th>
+            <th>Motor Volume</th>
+            <th>Motor Power</th>
+            <th>Color</th>
+            <th>Case Type</th>
         </tr>
-    </thead>
-    <tbody>
         @foreach (var car in Model)
         {
             <tr>
                 <td>@car.ID</td>
+                <td>@car.CARID</td>
                 <td>@car.PLATE</td>
+                <td>@car.LICENCEDATE</td>
+                <td>@car.CITYNR</td>
+                <td>@car.TITLE</td>
                 <td>@car.BRAND</td>
                 <td>@car.MODEL</td>
-               
+                <td>@car.YEAR_</td>
+                <td>@car.FUEL</td>
+                <td>@car.SHIFTTYPE</td>
+                <td>@car.MOTORVOLUME</td>
+                <td>@car.MOTORPOWER</td>
+                <td>@car.COLOR</td>
+                <td>@car.CASETYPE</td>
+                <td>@car.CASETYPE</td>
             </tr>
         }
-    </tbody>
-</table>
+    </table>
+</div>@{
+    int currentPage = ViewBag.PageNumber;
+    int totalPages = (int)Math.Ceiling((double)ViewBag.TotalCount / ViewBag.PageSize);
+    int minPage = Math.Max(currentPage - 2, 1);
+    int maxPage = Math.Min(currentPage + 2, totalPages);
+}
 
-@if (ViewBag.TotalCount > ViewBag.PageSize)
+@if (totalPages > 1)
 {
-    <div>
-        <a asp-action="GetAllCars" asp-route-pageNumber="1" asp-route-pageSize="@ViewBag.PageSize">First</a>
-        @if (ViewBag.PageNumber > 1)
-        {
-            <a asp-action="GetAllCars" asp-route-pageNumber="@ViewBag.PageNumber - 1" asp-route-pageSize="@ViewBag.PageSize">Previous</a>
-        }
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                <a class="page-link" asp-action="GetAllCars" asp-route-pageNumber="1" asp-route-pageSize="@ViewBag.PageSize">İlk</a>
+            </li>
+            <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                <a class="page-link" asp-action="GetAllCars" asp-route-pageNumber="@currentPage - 1" asp-route-pageSize="@ViewBag.PageSize">Önceki</a>
+            </li>
 
-        @for (int i = ViewBag.PageNumber - 2; i <= ViewBag.PageNumber + 2; i++)
-        {
-            if (i >= 1 && i <= Math.Ceiling((double)ViewBag.TotalCount / ViewBag.PageSize))
+            @if (minPage > 1)
             {
-                if (i == ViewBag.PageNumber)
+                <li class="page-item">
+                    <a class="page-link" asp-action="GetAllCars" asp-route-pageNumber="1" asp-route-pageSize="@ViewBag.PageSize">1</a>
+                </li>
+                @if (minPage > 2)
                 {
-                    <span>@i</span>
-                }
-                else
-                {
-                    <a asp-action="GetAllCars" asp-route-pageNumber="@i" asp-route-pageSize="@ViewBag.PageSize">@i</a>
+                    <li class="page-item">
+                        <a class="page-link">...</a>
+                    </li>
                 }
             }
-        }
 
-        @if (ViewBag.PageNumber < Math.Ceiling((double)ViewBag.TotalCount / ViewBag.PageSize))
-        {
-            <a asp-action="GetAllCars" asp-route-pageNumber="@ViewBag.PageNumber + 1" asp-route-pageSize="@ViewBag.PageSize">Next</a>
-        }
-        <a asp-action="GetAllCars" asp-route-pageNumber="@Math.Ceiling((double)ViewBag.TotalCount / ViewBag.PageSize)" asp-route-pageSize="@ViewBag.PageSize">Last</a>
-    </div>
+            @for (int i = minPage; i <= maxPage; i++)
+            {
+                <li class="page-item @(i == currentPage ? "active" : "")">
+                    <a class="page-link" asp-action="GetAllCars" asp-route-pageNumber="@i" asp-route-pageSize="@ViewBag.PageSize">@i</a>
+                </li>
+            }
+
+            @if (maxPage < totalPages)
+            {
+                @if (maxPage < totalPages - 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link">...</a>
+                    </li>
+                }
+                <li class="page-item">
+                    <a class="page-link" asp-action="GetAllCars" asp-route-pageNumber="@totalPages" asp-route-pageSize="@ViewBag.PageSize">@totalPages</a>
+                </li>
+            }
+
+            <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                <a class="page-link" asp-action="GetAllCars" asp-route-pageNumber="@currentPage + 1" asp-route-pageSize="@ViewBag.PageSize">Sonraki</a>
+            </li>
+            <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                <a class="page-link" asp-action="GetAllCars" asp-route-pageNumber="@totalPages" asp-route-pageSize="@ViewBag.PageSize">Son</a>
+            </li>
+        </ul>
+    </nav>
 }
+
