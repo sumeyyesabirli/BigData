@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>My Chart</title>
+    <!-- D3.js CDN veya local dosya yolu -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <h2>Tofaş Cars Chart</h2>
+    <div id="chart"></div>
+
+    <!-- D3.js kodlarını burada ekleyeceğiz -->
+    <script>
+        // D3.js kodlarını buraya ekleyin
+        // ...
+    </script>
+</body>
+</html>
+
+<script>
+    // Veri örneği (bu kısmı kendi veri yapınıza göre düzenleyin)
+    var carsData = [
+        { Model: "Model 1", Quantity: 20 },
+        { Model: "Model 2", Quantity: 30 },
+        { Model: "Model 3", Quantity: 15 },
+        // Diğer araç modelleri ve miktarları...
+    ];
+
+    // Çubuk grafik için genişlik ve yükseklik
+    var width = 400;
+    var height = 200;
+
+    var x = d3.scaleBand()
+        .domain(carsData.map(d => d.Model))
+        .range([0, width])
+        .padding(0.1);
+
+    var y = d3.scaleLinear()
+        .domain([0, d3.max(carsData, d => d.Quantity)])
+        .range([height, 0]);
+
+    var svg = d3.select("#chart")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+    svg.selectAll(".bar")
+        .data(carsData)
+        .enter().append("rect")
+        .attr("class", "bar")
+        .attr("x", d => x(d.Model))
+        .attr("width", x.bandwidth())
+        .attr("y", d => y(d.Quantity))
+        .attr("height", d => height - y(d.Quantity));
+</script>

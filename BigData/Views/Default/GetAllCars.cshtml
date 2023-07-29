@@ -1,109 +1,167 @@
 ﻿@using BigData.DAL.Entities
-
 @model IEnumerable<Plates>
-<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-<div class="container">
-    <br /><br />
-    <table class="table table-bordered">
-        <tr>
-            <th>#</th>
-            <th>ID</th>
-            <th>Car ID</th>
-            <th>Plate</th>
-            <th>Licence Date</th>
-            <th>City Number</th>
-            <th>Title</th>
-            <th>Brand</th>
-            <th>Model</th>
-            <th>Year</th>
-            <th>Fuel</th>
-            <th>Shift Type</th>
-            <th>Motor Volume</th>
-            <th>Motor Power</th>
-            <th>Color</th>
-            <th>Case Type</th>
-        </tr>
-        @foreach (var car in Model)
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <title>4 Milyon Veri</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="">
+    <meta name="author" content="Phoenixcoded" />
+    <!-- Favicon icon -->
+    <link rel="icon" href="~/flat-able-lite/flat-able-lite/dist/assets/images/favicon.ico" type="image/x-icon">
+
+    <!-- vendor css -->
+    <link rel="stylesheet" href="~/flat-able-lite/flat-able-lite/dist/assets/css/style.css">
+</head>
+
+<body class="">
+    <!-- [ Pre-loader ] start -->
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <br /><br />
+        <div class="input-group m-t-15">
+            <input type="text" class="form-control" name="searchText" placeholder="Arama yapmak için metin girin">
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-primary" onclick="searchCars()">
+                    <i class="feather icon-search"></i> Ara
+                </button>
+            </div>
+        </div>
+        <br />
+        @if (Model != null && Model.Any())
         {
-            <tr>
-                <td>@car.ID</td>
-                <td>@car.CARID</td>
-                <td>@car.PLATE</td>
-                <td>@car.LICENCEDATE</td>
-                <td>@car.CITYNR</td>
-                <td>@car.TITLE</td>
-                <td>@car.BRAND</td>
-                <td>@car.MODEL</td>
-                <td>@car.YEAR_</td>
-                <td>@car.FUEL</td>
-                <td>@car.SHIFTTYPE</td>
-                <td>@car.MOTORVOLUME</td>
-                <td>@car.MOTORPOWER</td>
-                <td>@car.COLOR</td>
-                <td>@car.CASETYPE</td>
-                <td>@car.CASETYPE</td>
-            </tr>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            
+                            <th>Plaka</th>
+                            <th>Unvan</th>
+                            <th>Marka</th>
+                            <th>Model</th>
+                            <th>Yıl</th>
+                            <th>Yakıt</th>
+                            <th>Vites Tipi</th>                            
+                            <th>Renk</th>                           
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var car in Model)
+                        {
+                            <tr>                                
+                                <td>@car.PLATE</td>
+                                <td>@car.TITLE</td>
+                                <td>@car.BRAND</td>
+                                <td>@car.MODEL</td>
+                                <td>@car.YEAR_</td>
+                                <td>@car.FUEL</td>
+                                <td>@car.SHIFTTYPE</td>                                
+                                <td>@car.COLOR</td>                                
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         }
-    </table>
-</div>@{
-    int currentPage = ViewBag.PageNumber;
-    int totalPages = (int)Math.Ceiling((double)ViewBag.TotalCount / ViewBag.PageSize);
-    int minPage = Math.Max(currentPage - 2, 1);
-    int maxPage = Math.Min(currentPage + 2, totalPages);
-}
+        else
+        {
+            <p>Veri bulunamadı.</p>
+        }
 
-@if (totalPages > 1)
-{
-    <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center">
-            <li class="page-item @(currentPage == 1 ? "disabled" : "")">
-                <a class="page-link" asp-action="GetAllCars" asp-route-pageNumber="1" asp-route-pageSize="@ViewBag.PageSize">İlk</a>
-            </li>
-            <li class="page-item @(currentPage == 1 ? "disabled" : "")">
-                <a class="page-link" asp-action="GetAllCars" asp-route-pageNumber="@currentPage - 1" asp-route-pageSize="@ViewBag.PageSize">Önceki</a>
-            </li>
+    </div>
 
-            @if (minPage > 1)
-            {
-                <li class="page-item">
-                    <a class="page-link" asp-action="GetAllCars" asp-route-pageNumber="1" asp-route-pageSize="@ViewBag.PageSize">1</a>
+    @{
+        int currentPage = ViewBag.PageNumber;
+        int totalPages = (int)Math.Ceiling((double)ViewBag.TotalCount / ViewBag.PageSize);
+        int minPage = Math.Max(currentPage - 2, 1);
+        int maxPage = Math.Min(currentPage + 2, totalPages);
+    }
+
+    @if (totalPages > 1)
+    {
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                    <a class="page-link" asp-action="GetAllCars" asp-route-pageNumber="1" asp-route-pageSize="@ViewBag.PageSize">İlk</a>
                 </li>
-                @if (minPage > 2)
+                <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                    <a class="page-link" asp-action="GetAllCars" asp-route-pageNumber="@currentPage - 1" asp-route-pageSize="@ViewBag.PageSize">Önceki</a>
+                </li>
+
+                @if (minPage > 1)
                 {
                     <li class="page-item">
-                        <a class="page-link">...</a>
+                        <a class="page-link" asp-action="GetAllCars" asp-route-pageNumber="1" asp-route-pageSize="@ViewBag.PageSize">1</a>
                     </li>
+                    @if (minPage > 2)
+                    {
+                        <li class="page-item">
+                            <a class="page-link">...</a>
+                        </li>
+                    }
                 }
-            }
 
-            @for (int i = minPage; i <= maxPage; i++)
-            {
-                <li class="page-item @(i == currentPage ? "active" : "")">
-                    <a class="page-link" asp-action="GetAllCars" asp-route-pageNumber="@i" asp-route-pageSize="@ViewBag.PageSize">@i</a>
-                </li>
-            }
-
-            @if (maxPage < totalPages)
-            {
-                @if (maxPage < totalPages - 1)
+                @for (int i = minPage; i <= maxPage; i++)
                 {
-                    <li class="page-item">
-                        <a class="page-link">...</a>
+                    <li class="page-item @(i == currentPage ? "active" : "")">
+                        <a class="page-link" asp-action="GetAllCars" asp-route-pageNumber="@i" asp-route-pageSize="@ViewBag.PageSize">@i</a>
                     </li>
                 }
-                <li class="page-item">
-                    <a class="page-link" asp-action="GetAllCars" asp-route-pageNumber="@totalPages" asp-route-pageSize="@ViewBag.PageSize">@totalPages</a>
+
+                @if (maxPage < totalPages)
+                {
+                    @if (maxPage < totalPages - 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link">...</a>
+                        </li>
+                    }
+                    <li class="page-item">
+                        <a class="page-link" asp-action="GetAllCars" asp-route-pageNumber="@totalPages" asp-route-pageSize="@ViewBag.PageSize">@totalPages</a>
+                    </li>
+                }
+
+                <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                    <a class="page-link" asp-action="GetAllCars" asp-route-pageNumber="@currentPage + 1" asp-route-pageSize="@ViewBag.PageSize">Sonraki</a>
                 </li>
-            }
+                <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                    <a class="page-link" asp-action="GetAllCars" asp-route-pageNumber="@totalPages" asp-route-pageSize="@ViewBag.PageSize">Son</a>
+                </li>
+            </ul>
+        </nav>
+    }
 
-            <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
-                <a class="page-link" asp-action="GetAllCars" asp-route-pageNumber="@currentPage + 1" asp-route-pageSize="@ViewBag.PageSize">Sonraki</a>
-            </li>
-            <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
-                <a class="page-link" asp-action="GetAllCars" asp-route-pageNumber="@totalPages" asp-route-pageSize="@ViewBag.PageSize">Son</a>
-            </li>
-        </ul>
-    </nav>
-}
+</body>
 
+<script>
+    function searchCars() {
+        var searchText = document.getElementsByName("searchText")[0].value;
+        window.location.href = "/Default/GetAllCars?searchText=" + searchText;
+    }
+</script>
+
+<!-- Required Js -->
+<script src="~/flat-able-lite/flat-able-lite/dist/assets/js/vendor-all.min.js"></script>
+<script src="~/flat-able-lite/flat-able-lite/dist/assets/js/plugins/bootstrap.min.js"></script>
+<script src="~/flat-able-lite/flat-able-lite/dist/assets/js/pcoded.min.js"></script>
+
+<!-- Apex Chart -->
+<script src="~/flat-able-lite/flat-able-lite/dist/assets/js/plugins/apexcharts.min.js"></script>
+
+<!-- custom-chart js -->
+<script src="~/flat-able-lite/flat-able-lite/dist/assets/js/pages/dashboard-main.js"></script>
+
+</html>
