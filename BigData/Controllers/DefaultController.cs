@@ -25,7 +25,7 @@ namespace BigData.Controllers
         private int GetTotalCarCount(SqlConnection connection)
         {
             string countQuery = "SELECT COUNT(*) FROM Plates";
-            int totalCount = connection.ExecuteScalar<int?>(countQuery) ?? 0; // Default değeri 0 olarak ayarladık.
+            int totalCount = connection.ExecuteScalar<int?>(countQuery) ?? 0; 
             return totalCount;
         }
 
@@ -35,9 +35,9 @@ namespace BigData.Controllers
             {
                 int offset = (pageNumber - 1) * pageSize;
 
-                // Arama metnini kullanarak parametreli bir sorgu oluşturun
+                
                 string whereClause = string.IsNullOrEmpty(searchText)
-                    ? "" // Eğer arama metni boş ise tüm verileri getir
+                    ? "" 
                     : @"WHERE PLATE LIKE @SearchText
                     OR LICENCEDATE LIKE @SearchText
                     OR TITLE LIKE @SearchText
@@ -49,14 +49,14 @@ namespace BigData.Controllers
                     OR MOTORVOLUME LIKE @SearchText
                     OR MOTORPOWER LIKE @SearchText
                     OR COLOR LIKE @SearchText
-                    OR CASETYPE LIKE @SearchText"; // Diğer alanlar burada eklenmeli
+                    OR CASETYPE LIKE @SearchText";
 
                 string sqlQuery = $@"
                     SELECT * FROM Plates
                     {whereClause}
                     ORDER BY ID OFFSET {offset} ROWS FETCH NEXT {pageSize} ROWS ONLY";
 
-                // Parametreli sorguyu kullanmak için parametreleri ekleyin
+                
                 IEnumerable<Plates> cars = connection.Query<Plates>(sqlQuery, new { SearchText = $"%{searchText}%" });
 
                 ViewBag.PageNumber = pageNumber;
