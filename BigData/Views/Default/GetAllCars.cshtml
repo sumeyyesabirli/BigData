@@ -5,7 +5,37 @@
 <html lang="tr">
 
 <head>
-    <title>4 Milyon Veri</title>
+
+    <div class="container">
+        <br /><br />
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="card text-white bg-secondary ">
+                    <h5 class="card-header text-white">En Fazla Olan Araç Markası</h5>
+                    <div class="card-body">
+                        <h5 class="card-title text-white">@ViewBag.BrandMax - @ViewBag.CountMax adet</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card text-white bg-success">
+                    <h5 class="card-header text-white">En Fazla Olan Araç Rengi</h5>
+                    <div class="card-body">
+                        <h5 class="card-title text-white">@ViewBag.ColorMax - @ViewBag.CountColorMax adet</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card text-white bg-primary">
+                    <h5 class="card-header text-white">En Fazla Olan Vites Tipi</h5>
+                    <div class="card-body">
+                        <h5 class="card-title text-white">@ViewBag.ShiftTypeMax - @ViewBag.CountShiftTypeMax adet</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
 
     <!-- Meta -->
     <meta charset="utf-8">
@@ -76,12 +106,14 @@
                 </table>
             </div>
         }
+
         else
         {
             <p>Veri bulunamadı.</p>
         }
 
     </div>
+
 
     @{
         int currentPage = ViewBag.PageNumber;
